@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#3 template</title>
+</head>
+<body>
+    <h1>blog list </h1>
+    <p>{{today}}</p>
+    {%comment%} if else {%endcomment%}
+    {%if blogs.0.is_published%}
+    <h2>feature blog : {{blogs.0.title}}</h2>
+    {%else%}
+    <h2>no feature blog : {{blogs.0.title}}</h2>
+    {%endif%}
+
+    {%comment%} for loop {%endcomment%}
+    <ul>
+        {% for blog in blogs %}
+        <li>{{forloop.counter}}. {{blog.title}} - {{blog.author}}</li>
+        {% empty %}
+        <li> no blog available </li>
+        {% endfor %}
+
+        {%comment%} with {% endcomment %}
+        {% with total_blogs=blogs|length%}
+        <p> total blogs : {{total_blogs}}</p>
+        {% endwith %}
+    </ul>
+
+    {% comment %} cycle {% endcomment %}
+        <hr>
+        <h2> blog in table </h2>
+
+        <table border="1" cellpadding="5" cellspacing="0">
+        {% for blog in blogs %}
+         <tr style="background-color: {% cycle 'lightblue' 'lightgreen' %};">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ blog.title }}</td>
+        <td>{{ blog.author|default:"Unknown" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">no blog available</td></tr>
+        {% endfor %}
+        </table>
+        {%comment%} firstof {% endcomment %}
+        <p>Author : {% firstof blog.author "abc" %} </p>
+
+        {% comment %} verbatim {% endcomment %}
+        {% verbatim %}
+        <p> Author : {{blog.1.author}}</p>
+        {% endverbatim %}
+
+        {%comment %} autoescape {% endcomment %}
+        <h2> autoescape </h2>
+        <p> default (safe Escaped) : {{html_code}} </p>
+        <p> autoescape off (unsafe) : {{html_code|safe}}</p>
+        {%autoescape off %}
+        <p> autoescape off : {{html_code}}</p>
+        {% endautoescape %}
+        
+</body>
+</html>
